@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Administración - Los Chamos Roleplay</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #667eea;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .empty {
+      text-align: center;
+      padding: 20px;
+      color: #888;
+      font-style: italic;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #667eea;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Panel de Administradores</h1>
+    <table id="applicationsTable">
+      <thead>
+        <tr>
+          <th>Código de Cupón</th>
+          <th>Usuario</th>
+          <th>Nombre IC</th>
+          <th>Puntuación</th>
+          <th>Respuesta RP</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Datos dinámicos aquí -->
+      </tbody>
+    </table>
+    <p class="empty" id="emptyMessage">No hay postulaciones registradas aún.</p>
+    <a href="formulario_staff.html" class="back-link">← Volver al formulario</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const approvedAdmins = JSON.parse(localStorage.getItem('approvedAdmins') || '[]');
+      const tableBody = document.getElementById('tableBody');
+      const emptyMessage = document.getElementById('emptyMessage');
+
+      if (approvedAdmins.length === 0) {
+        emptyMessage.style.display = 'block';
+        return;
+      }
+
+      emptyMessage.style.display = 'none';
+
+      approvedAdmins.forEach(applicant => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${applicant.ticketCode}</td>
+          <td>${applicant.username}</td>
+          <td>${applicant.icName}</td>
+          <td>${applicant.score}/${Object.keys(applicant.correctAnswers || correctAnswers).length} (${applicant.percentage.toFixed(1)}%)</td>
+          <td><textarea readonly rows="4" style="width: 100%; resize: vertical; padding: 10px;">${applicant.roleplayResponse || ''}</textarea></td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+
+    // Copia del objeto correctAnswers para mostrar número total de preguntas
+    const correctAnswers = {
+      q1: 'b',
+      q2: 'a', 
+      q3: 'a',
+      q4: 'b',
+      q5: 'a',
+      q6: 'b',
+      q7: 'a',
+      q8: 'a',
+      q9: 'a',
+      q10: 'a'
+    };
+  </script>
+</body>
+</html>
